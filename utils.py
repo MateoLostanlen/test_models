@@ -40,11 +40,11 @@ def test_pred(labels, preds, conf_th=0.25, iou_th=0):
         for pred in preds:
             conf = pred[-1]
             match = False
-            for i, label in enumerate(labels):
-                iou = box_iou(
-                    torch.tensor(pred[:4]).unsqueeze(0),
-                    torch.tensor(label[:4]).unsqueeze(0),
-                ).item()
+            pred = np.expand_dims(pred[:4], axis=0)
+            for i, label in enumerate(labels):  
+                label = np.expand_dims(label[:4], axis=0)
+                # print((pred.shape,label.shape))
+                iou = box_iou(pred,label).item()
                 if conf >= conf_th and iou > iou_th:
                     tp += 1
                     gt_ok[i] = True
